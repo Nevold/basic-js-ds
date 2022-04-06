@@ -35,13 +35,12 @@ class Queue {
   }
 
   enqueue(value) {
-    this.array.push(value);
+    this.array.unshift(value);
     this.queue = Queue.createQueue(this.array);
-    // return this.queue;
   }
 
   dequeue() {
-    const elem = this.array.shift();
+    const elem = this.array.pop();
     this.queue = Queue.createQueue(this.array);
     return elem;
   }
