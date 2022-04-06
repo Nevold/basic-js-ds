@@ -39,22 +39,50 @@ class BinarySearchTree {
     }
   }
 
-  static searchTreeMin(node) {
+  static searchMinNode(node) {
     if (node === null) {
       return null;
     } else if (node.left !== null) {
-      return this.searchTreeMin(node.left);
+      return this.searchMinNode(node.left);
     }
     return node;
   }
 
-  static searchTreeMax(node) {
+  static searchMaxNode(node) {
     if (node === null) {
       return null;
     } else if (node.right !== null) {
-      return this.searchTreeMax(node.right);
+      return this.searchMaxNode(node.right);
     }
     return node;
+  }
+
+  static removeNode(node, data) {
+    if (node === null) {
+      return null;
+    } else if (data < node.data) {
+      node.left = this.removeNode(node.left, data);
+      return node;
+    } else if (data > node.data) {
+      node.right = this.removeNode(node.right, data);
+      return node;
+    } else {
+      if (node.left === null && node.right === null) {
+        node = null;
+        return node;
+      }
+      if (node.left === null) {
+        node = node.right;
+        return node;
+      } else if (node.right === null) {
+        node = node.left;
+        return node;
+      }
+      let newNode = BinarySearchTree.searchMinNode(node.right);
+      node.data = newNode.data;
+      node.right = this.removeNode(node.right, newNode.data);
+      return node;
+    }
   }
 
   root() {
@@ -78,18 +106,17 @@ class BinarySearchTree {
     return BinarySearchTree.searchTree(this.rootNode, data);
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  remove(data) {
+    return (this.root = BinarySearchTree.removeNode(this.rootNode, data));
   }
 
   min() {
-    const minValue = BinarySearchTree.searchTreeMin(this.rootNode);
+    const minValue = BinarySearchTree.searchMinNode(this.rootNode);
     return minValue ? minValue.data : null;
   }
 
   max() {
-    const maxValue = BinarySearchTree.searchTreeMax(this.rootNode);
+    const maxValue = BinarySearchTree.searchMaxNode(this.rootNode);
     return maxValue ? maxValue.data : null;
   }
 }
